@@ -23,7 +23,7 @@ public class ClusterStatusReport implements Report {
 	}
 
 	public void mailReport() {
-		MailClient.sendHTMLEmail("averma@fiberlink.com", REPORT_NAME,
+		MailClient.sendHTMLEmail("your_mail_id", REPORT_NAME,
 				MailClient.formatMail("ES Cluster is down"));
 		logger.info("clsuter is down");
 	}
