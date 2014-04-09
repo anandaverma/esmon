@@ -135,7 +135,7 @@ public class ClusterHealthReport implements Report {
 			logger.error("unable to construct message", e);
 		}
 		if (msg != null) {
-			if (MailClient.sendHTMLEmail("averma@fiberlink.com", REPORT_NAME,
+			if (MailClient.sendHTMLEmail("your_mail_id", REPORT_NAME,
 					MailClient.formatMail(msg))) {
 			}
 		} else {
