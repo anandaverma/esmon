@@ -1,9 +1,9 @@
 esmon
 =====
 
-ElasticSearch Monitoring and Alert App
+ElasticSearch Monitoring and Alert App.
 
-Currently tested with Elastic Search v0.90.9. It uses a rest client to query elastic search so most of it will work with any later version given that the JSON response is same.
+Currently tested with Elastic Search v0.90.9. It uses a rest client to query elastic search, so most of it will work with any later version, given that the JSON response is same.
 
 ###dependencies
 esmon uses following libraries
