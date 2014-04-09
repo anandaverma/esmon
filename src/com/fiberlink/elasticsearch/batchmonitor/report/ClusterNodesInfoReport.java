@@ -86,7 +86,7 @@ public class ClusterNodesInfoReport implements Report {
 			logger.error("unable to construct message", e);
 		}
 		if (msg != null) {
-			MailClient.sendHTMLEmail("averma@fiberlink.com", REPORT_NAME,
+			MailClient.sendHTMLEmail("your_mail_id", REPORT_NAME,
 					MailClient.formatMail(msg));
 		} else {
 			logger.error("message body is null, something wrong in parsing Json response");
