@@ -1,7 +1,16 @@
 esmon
 =====
 
-ElasticSearch Monitoring and Alert App
+ElasticSearch Monitoring and Alert App.
+
+Currently tested with Elastic Search v0.90.9. It uses a rest client to query elastic search, so most of it will work with any later version, given that the JSON response is same.
+
+###dependencies
+esmon uses following libraries
+* quartz2.2.1
+* javamail1.4.7
+* log4j1.2.16
+* jackson2.2.3
 
 ###Configuration
 All configuration files are present in _resources folder
