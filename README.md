@@ -19,7 +19,7 @@ esmon uses following libraries
 * jackson2.2.3
 
 ###Configuration
-All configuration files are present in _resources folder
+All configuration files are present in resources folder
 
 
 ####es-batch-monitor.properties
