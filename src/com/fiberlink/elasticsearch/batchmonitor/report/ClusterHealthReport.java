@@ -154,6 +154,7 @@ public class ClusterHealthReport implements Report {
 		if (msg != null && subscriptionProp.getProperty("subscribers") != null) {
 			MailClient.sendHTMLEmail(subscriptionProp.getProperty("subscribers"), REPORT_NAME,
 					MailClient.formatMail(msg));
+
 		} else {
 			logger.error("message body is null, something wrong in parsing Json response");
 		}
