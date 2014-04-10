@@ -33,6 +33,8 @@ I not using password authentication. You can replace the MailClient to suit your
 configure quartz schedular
 
 >resources folder contains alert folder which further contains alert files (This is very dirty as of now but I am trying to comeup with a better approach)
+
+
 >resources foloder contains report-subscription folder which contains mail id of all subscriber to respective report
 
 ###Running 
