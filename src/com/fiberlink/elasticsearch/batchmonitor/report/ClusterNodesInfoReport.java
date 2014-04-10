@@ -30,6 +30,7 @@ public class ClusterNodesInfoReport implements Report {
 	private static Logger logger = Logger
 			.getLogger(ClusterNodesInfoReport.class);
 	private MyHttpClient httpclient = new MyHttpClient();
+	private String msg = null;
 
 	private Properties prop = new Properties();
 
@@ -63,45 +64,6 @@ public class ClusterNodesInfoReport implements Report {
 
 	@Override
 	public void mailReport() {
-		// build health report
-		String msg = null;
-		try {
-			msg = "Hi,<br />"
-					+ "Here is the Node Status on "
-					+ new SimpleDateFormat("dd MMM, yyyy HH:MM:ss")
-							.format((new Timestamp(new Date().getTime())))
-					+ "<br /><br />" + "<b>Cluster Name: </b> "
-					+ myNodeInfo.getCluster_name() + "<br />"
-					+ "<b>Total Nodes: </b>"
-					+ myNodeInfo.getNodes().any().size() + "<hr />";
-			Map<String, NodeInfo.Nodes.NodeObject> map = myNodeInfo.getNodes()
-					.any();
-			for (Entry<String, NodeObject> entry : map.entrySet()) {
-				msg = msg + "<b>Node Name: </b> " + entry.getValue().getName()
-						+ "<br />" + "<b>Node Type: </b>" + "client: "
-						+ entry.getValue().getAttributes().getClient()
-						+ ", data: "
-						+ entry.getValue().getAttributes().getData()
-						+ ", master: "
-						+ entry.getValue().getAttributes().getMaster()
-						+ "<br />" + "<b>Jvm Pid: </b>"
-						+ entry.getValue().getJvm().getPid() + "<br />"
-						+ "<b>Heap Init: </b>"
-						+ entry.getValue().getJvm().getMem().getHeap_init()
-						+ "<br />" + "<b>Heap Max: </b>"
-						+ entry.getValue().getJvm().getMem().getHeap_max()
-						+ "<br />" + "<b>Non Heap Init: </b>"
-						+ entry.getValue().getJvm().getMem().getNon_heap_init()
-						+ "<br />" + "<b>Non Heap Max: </b>"
-						+ entry.getValue().getJvm().getMem().getNon_heap_max()
-						+ "<br />" + "<b>Direct Max: </b>"
-						+ entry.getValue().getJvm().getMem().getDirect_max()
-						+ "<br />" + "<br /><br />";
-			}
-
-		} catch (Exception e) {
-			logger.error("unable to construct message", e);
-		}
 		if (msg != null && subscriptionProp.getProperty("subscribers") != null) {
 			MailClient.sendHTMLEmail(subscriptionProp.getProperty("subscribers"), REPORT_NAME,
 					MailClient.formatMail(msg));
@@ -120,5 +82,44 @@ public class ClusterNodesInfoReport implements Report {
 						prop.getProperty("ES_HOST_ADDR"),
 						prop.getProperty("ES_HOST_PORT"),
 						ElasticSearchSettings.nodeInfoEndPoint), NodeInfo.class);
+		// build health report
+
+				try {
+					msg = "Hi,<br />"
+							+ "Here is the Node Status on "
+							+ new SimpleDateFormat("dd MMM, yyyy HH:MM:ss")
+									.format((new Timestamp(new Date().getTime())))
+							+ "<br /><br />" + "<b>Cluster Name: </b> "
+							+ myNodeInfo.getCluster_name() + "<br />"
+							+ "<b>Total Nodes: </b>"
+							+ myNodeInfo.getNodes().any().size() + "<hr />";
+					Map<String, NodeInfo.Nodes.NodeObject> map = myNodeInfo.getNodes()
+							.any();
+					for (Entry<String, NodeObject> entry : map.entrySet()) {
+						msg = msg + "<b>Node Name: </b> " + entry.getValue().getName()
+								+ "<br />" + "<b>Node Type: </b>" + "client: "
+								+ entry.getValue().getAttributes().getClient()
+								+ ", data: "
+								+ entry.getValue().getAttributes().getData()
+								+ ", master: "
+								+ entry.getValue().getAttributes().getMaster()
+								+ "<br />" + "<b>Jvm Pid: </b>"
+								+ entry.getValue().getJvm().getPid() + "<br />"
+								+ "<b>Heap Init: </b>"
+								+ entry.getValue().getJvm().getMem().getHeap_init()
+								+ "<br />" + "<b>Heap Max: </b>"
+								+ entry.getValue().getJvm().getMem().getHeap_max()
+								+ "<br />" + "<b>Non Heap Init: </b>"
+								+ entry.getValue().getJvm().getMem().getNon_heap_init()
+								+ "<br />" + "<b>Non Heap Max: </b>"
+								+ entry.getValue().getJvm().getMem().getNon_heap_max()
+								+ "<br />" + "<b>Direct Max: </b>"
+								+ entry.getValue().getJvm().getMem().getDirect_max()
+								+ "<br />" + "<br /><br />";
+					}
+
+				} catch (Exception e) {
+					logger.error("unable to construct message", e);
+				}
 	}
 }
