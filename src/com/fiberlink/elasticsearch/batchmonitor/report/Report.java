@@ -8,5 +8,4 @@ public interface Report extends Job {
 	public void execute(JobExecutionContext context);
 	public void mailReport();
 	public void loadSubscriptionFile();
-	
 }
