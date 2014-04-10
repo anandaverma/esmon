@@ -37,3 +37,6 @@ configure quartz schedular
 
 ###Running 
 compile and generate the jar file. Put the resources folder in the same directory.  
+
+###Usage
+tbd
