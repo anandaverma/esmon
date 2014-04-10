@@ -9,6 +9,11 @@ public class ClusterNodeStatisticReport implements Report {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void loadSubscriptionFile() {
+		
+	}
 
 	@Override
 	public void execute(JobExecutionContext context) {

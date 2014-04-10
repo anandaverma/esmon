@@ -3,7 +3,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -82,6 +81,7 @@ public class MailClient {
                 return false;
             }
     }
+    
     
     public static String formatMail(String msg) {
     	String header = "<html><head><head><body>";

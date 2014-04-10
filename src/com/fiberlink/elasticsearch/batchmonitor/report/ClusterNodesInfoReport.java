@@ -1,5 +1,9 @@
 package com.fiberlink.elasticsearch.batchmonitor.report;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +25,8 @@ import com.fiberlink.elasticsearch.batchmonitor.util.MyUtils;
 public class ClusterNodesInfoReport implements Report {
 	private NodeInfo myNodeInfo;
 	private final String REPORT_NAME = "LogAnalyzer Node Information Report";
-
+	private final File REPORT_SUBSCRIPTION_FILE = new File("resources//report-subscription//cluster-node-info.properties");
+	private Properties subscriptionProp = new Properties();
 	private static Logger logger = Logger
 			.getLogger(ClusterNodesInfoReport.class);
 	private MyHttpClient httpclient = new MyHttpClient();
@@ -37,10 +42,22 @@ public class ClusterNodesInfoReport implements Report {
 		// check cluster is up
 		if (MyUtils.isClusterUp()) {
 			createReport();
+			loadSubscriptionFile();
 			mailReport();
 		} else {
 			// send alert for cluster is down
 			logger.error("cluster is down");
+		}
+	}
+	@Override
+	public void loadSubscriptionFile() {
+		try {
+			subscriptionProp.load(new FileInputStream(
+					REPORT_SUBSCRIPTION_FILE));
+		} catch (FileNotFoundException e) {
+			logger.error("subscription file not found ", e);
+		} catch (IOException e) {
+			logger.error("error reading subscription file", e);
 		}
 	}
 
@@ -85,8 +102,8 @@ public class ClusterNodesInfoReport implements Report {
 		} catch (Exception e) {
 			logger.error("unable to construct message", e);
 		}
-		if (msg != null) {
-			MailClient.sendHTMLEmail("averma@fiberlink.com", REPORT_NAME,
+		if (msg != null && subscriptionProp.getProperty("subscribers") != null) {
+			MailClient.sendHTMLEmail(subscriptionProp.getProperty("subscribers"), REPORT_NAME,
 					MailClient.formatMail(msg));
 		} else {
 			logger.error("message body is null, something wrong in parsing Json response");

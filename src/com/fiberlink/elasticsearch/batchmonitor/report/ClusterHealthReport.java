@@ -1,5 +1,9 @@
 package com.fiberlink.elasticsearch.batchmonitor.report;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
@@ -20,16 +24,16 @@ public class ClusterHealthReport implements Report {
 	private ClusterHealth myClusterHealth;
 	private ClusterStats myClusterStats;
 	private final String REPORT_NAME = "LogAnalyzer ES Health Report";
-
+	private final File REPORT_SUBSCRIPTION_FILE = new File("resources//report-subscription//cluster-health.properties");
+	private Properties subscriptionProp = new Properties();
 	private static Logger logger = Logger.getLogger(ClusterHealthReport.class);
 	private MyHttpClient httpclient = new MyHttpClient();
-
 	private Properties prop = new Properties();
-
 	public ClusterHealthReport() {
 		prop = MyUtils.loadProperties();
 	}
 
+	
 	@Override
 	public void createReport() {
 		// get Cluster Health
@@ -49,9 +53,22 @@ public class ClusterHealthReport implements Report {
 	}
 
 	@Override
+	public void loadSubscriptionFile() {
+		try {
+			subscriptionProp.load(new FileInputStream(
+					REPORT_SUBSCRIPTION_FILE));
+		} catch (FileNotFoundException e) {
+			logger.error("subscription file not found ", e);
+		} catch (IOException e) {
+			logger.error("error reading subscription file", e);
+		}
+	}
+	
+	@Override
 	public void execute(JobExecutionContext context) {
 		if (MyUtils.isClusterUp()) {
 			createReport();
+			loadSubscriptionFile();
 			mailReport();
 		} else {
 			// send alert for cluster is down
@@ -134,10 +151,9 @@ public class ClusterHealthReport implements Report {
 		} catch (Exception e) {
 			logger.error("unable to construct message", e);
 		}
-		if (msg != null) {
-			if (MailClient.sendHTMLEmail("averma@fiberlink.com", REPORT_NAME,
-					MailClient.formatMail(msg))) {
-			}
+		if (msg != null && subscriptionProp.getProperty("subscribers") != null) {
+			MailClient.sendHTMLEmail(subscriptionProp.getProperty("subscribers"), REPORT_NAME,
+					MailClient.formatMail(msg));
 		} else {
 			logger.error("message body is null, something wrong in parsing Json response");
 		}
