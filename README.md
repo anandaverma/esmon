@@ -31,10 +31,8 @@ configure the mail settings -  SMTP host, port etc.
 I not using password authentication. You can replace the MailClient to suit your requirments
 ####quartz.properties
 configure quartz schedular
-
-
+####Other Configurations
 * Resources folder contains alert folder which further contains alert files (This is very dirty as of now but I am trying to comeup with a better approach)
-
 * Resources folder contains report-subscription folder which contains mail id of all subscriber to respective reports
 
 ###Running 
