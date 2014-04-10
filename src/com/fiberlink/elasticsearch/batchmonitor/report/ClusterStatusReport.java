@@ -18,6 +18,7 @@ public class ClusterStatusReport implements Report {
 	private final String REPORT_NAME = "LogAnalyzer ES Cluster Status";
 	private final File REPORT_SUBSCRIPTION_FILE = new File("resources//report-subscription//cluster-status.properties");
 	private Properties subscriptionProp = new Properties();
+	private String msg = null;
 
 	public ClusterStatusReport() {
 		MyUtils.loadProperties();
@@ -44,7 +45,6 @@ public class ClusterStatusReport implements Report {
 	}
 
 	public void mailReport() {
-		String msg = "ES Cluster is down";
 		if (msg != null && subscriptionProp.getProperty("subscribers") != null)
 		MailClient.sendHTMLEmail(subscriptionProp.getProperty("subscribers"), REPORT_NAME,
 				MailClient.formatMail(msg));
@@ -52,6 +52,6 @@ public class ClusterStatusReport implements Report {
 	}
 
 	public void createReport() {
-		
+		msg = "ES Cluster is down";
 	}
 }
