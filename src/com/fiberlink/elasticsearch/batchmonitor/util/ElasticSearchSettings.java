@@ -13,4 +13,5 @@ public class ElasticSearchSettings {
 		public static final String indecesStatsEndPoint = "_stats";
 		public static final String indecesStatusEndPoint = "_status";
 		public static final String aliasesEndPoint = "_aliases";
+		public static final String searchEndPoint = "_search";
 }

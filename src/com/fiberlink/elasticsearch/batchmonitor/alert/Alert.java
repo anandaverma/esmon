@@ -93,7 +93,7 @@ public class Alert implements Job {
 			if (alertCompare.equalsIgnoreCase("GreaterThan")) {
 				if (Float.parseFloat(m1.group(0)) > Float.parseFloat(m2
 						.group(0))) {
-					String msg = "Hi, " + "<br />Index Size Limit Reached on "
+					String msg = "Hi, " + "<br />Index Size Limit Reached"
 							+ "<br />Index Size: <b><span style='color:red'>"
 							+ clusterstats.getIndices().getStore().getSize()
 							+ "</span></b><br />" + "Expected: <b><span style='color:green'>"

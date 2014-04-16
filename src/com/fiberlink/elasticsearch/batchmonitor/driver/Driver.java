@@ -1,6 +1,7 @@
 package com.fiberlink.elasticsearch.batchmonitor.driver;
 
 import org.apache.log4j.Logger;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -12,6 +13,7 @@ import com.fiberlink.elasticsearch.batchmonitor.alert.Alert;
 import com.fiberlink.elasticsearch.batchmonitor.report.ClusterHealthReport;
 import com.fiberlink.elasticsearch.batchmonitor.report.ClusterNodesInfoReport;
 import com.fiberlink.elasticsearch.batchmonitor.report.ClusterStatusReport;
+import com.fiberlink.elasticsearch.batchmonitor.report.QueryApacheTopUrlReport;
 
 import static org.quartz.JobBuilder.*;
 import static org.quartz.TriggerBuilder.*;
@@ -30,6 +32,9 @@ public class Driver {
 			// define jobs and tie to your class
 			JobDetail jobClusterHealth = newJob(ClusterHealthReport.class)
 					.withIdentity("ClusterHealth", "Report").build();
+			JobDetail jobQueryApacheTopUrl = newJob(
+					QueryApacheTopUrlReport.class).withIdentity("QueryReport",
+					"Report").build();
 			JobDetail jobClusterStatus = newJob(ClusterStatusReport.class)
 					.withIdentity("ClusterStatus", "Report").build();
 			JobDetail jobNodeInfo = newJob(ClusterNodesInfoReport.class)
@@ -49,14 +54,14 @@ public class Driver {
 					.withIdentity("triggerClusterHealth", "Cluster")
 					.startNow()
 					.withSchedule(
-							simpleSchedule().withIntervalInHours(6)
+							simpleSchedule().withIntervalInHours(12)
 									.repeatForever()).build();
 			// Trigger the job to run now, and then repeat every 6 hour
 			Trigger triggerClusterNodeInfo = newTrigger()
 					.withIdentity("triggerClusterNodeInfo", "Node")
 					.startNow()
 					.withSchedule(
-							simpleSchedule().withIntervalInHours(6)
+							simpleSchedule().withIntervalInHours(12)
 									.repeatForever()).build();
 			// Trigger the job to run now, and then repeat every 6 hour
 			Trigger triggerAlert = newTrigger()
@@ -65,6 +70,10 @@ public class Driver {
 					.withSchedule(
 							simpleSchedule().withIntervalInHours(1)
 									.repeatForever()).build();
+			// Trigger the job to run now, and then repeat every 6 hour
+			Trigger triggerQuery = newTrigger()
+					.withIdentity("triggerAuery", "Query")
+					.withSchedule(CronScheduleBuilder.cronSchedule("0 0 17 * * ? *")).build();
 
 			// Tell quartz to schedule the job using our trigger
 			scheduler.start();
@@ -73,6 +82,8 @@ public class Driver {
 			scheduler.scheduleJob(jobClusterHealth, triggerClusterHealth);
 			scheduler.scheduleJob(jobNodeInfo, triggerClusterNodeInfo);
 			scheduler.scheduleJob(jobAlert, triggerAlert);
+			scheduler.scheduleJob(jobQueryApacheTopUrl, triggerQuery);
+
 		} catch (SchedulerException se) {
 			logger.error("Schedular failed", se);
 		}
