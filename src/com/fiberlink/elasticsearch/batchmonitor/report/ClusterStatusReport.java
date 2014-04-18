@@ -15,7 +15,7 @@ import com.fiberlink.elasticsearch.batchmonitor.util.MyUtils;
 public class ClusterStatusReport implements Report {
 
 	private static Logger logger = Logger.getLogger(ClusterStatusReport.class);
-	private final String REPORT_NAME = "LogAnalyzer ES Cluster Status";
+	private final String REPORT_NAME = "IMP-Elastic Search Cluster is down";
 	private final File REPORT_SUBSCRIPTION_FILE = new File("resources//report-subscription//cluster-status.properties");
 	private Properties subscriptionProp = new Properties();
 	private String msg = null;
@@ -52,6 +52,6 @@ public class ClusterStatusReport implements Report {
 	}
 
 	public void createReport() {
-		msg = "ES Cluster is down";
+		msg = "<font size=\"3\" color=\"red\">I am unable to ping ES Cluster. It might be down</font>";
 	}
 }
