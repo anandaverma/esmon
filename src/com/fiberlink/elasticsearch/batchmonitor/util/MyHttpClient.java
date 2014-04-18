@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -33,24 +35,24 @@ public class MyHttpClient {
 		try {
 			URL url = new URL(host + ":" + port + "/" + endPoint);
 			getHttpConnection(url);
-			// check if response code is 200
+			// check if response code is 200 (OK)
 			if (conn instanceof HttpURLConnection) {
-				int code = ((HttpURLConnection) conn).getResponseCode();
-				if (code != HttpURLConnection.HTTP_OK) {
-					logger.error("Request falied with error code " + code);
+				if (((HttpURLConnection) conn).getResponseCode() != HttpURLConnection.HTTP_OK) {
+					logger.error("Request falied with error code " + ((HttpURLConnection) conn).getResponseCode());
 					return "Request Failed";
 				}
-				
 			}
 			BufferedReader reader = new BufferedReader(new InputStreamReader(((URLConnection) conn).getInputStream()));
 			String line;
 			while((line = reader.readLine()) != null) {
 				responseData = responseData + line;
 			}
-		} catch (Exception e) {
-			logger.error("conection failed", e);
+		} catch (IOException e) {
+			logger.error("connection failed", e);
+			return "Request Failed";
 		} finally {
 			closeConnection();
+			logger.info("closing connection");
 		}
 		logger.debug("recieved" + responseData);
 		return responseData;
@@ -82,9 +84,17 @@ public class MyHttpClient {
 			while((line = reader.readLine()) != null) {
 				responseData = responseData + line;
 			}
-		} catch (Exception e) {
-			logger.error("conection failed", e);
-		} finally {
+		} catch (ProtocolException e) {
+			logger.error("connection failed with protocol exception", e);
+			return "Request Failed";
+		} catch (MalformedURLException e) {
+			logger.error("connection failed with protocol exception", e);
+			return "Request Failed";
+		} catch (IOException e) {
+			logger.error("connnection failed with protocol exception", e);
+			return "Request Failed";
+		}
+		finally {
 			closeConnection();
 		}
 		logger.debug("recieved" + responseData);
