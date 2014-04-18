@@ -73,7 +73,7 @@ public class Driver {
 			// Trigger the job to run now, and then repeat every 6 hour
 			Trigger triggerQuery = newTrigger()
 					.withIdentity("triggerAuery", "Query")
-					.withSchedule(CronScheduleBuilder.cronSchedule("0 0 17 * * ? *")).build();
+					.withSchedule(CronScheduleBuilder.cronSchedule("0 0 7 * * ? *")).build();
 
 			// Tell quartz to schedule the job using our trigger
 			scheduler.start();
